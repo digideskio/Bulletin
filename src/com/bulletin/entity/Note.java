@@ -12,6 +12,7 @@ public class Note {
     public Note(Eleve eleve, Matiere matiere, NoteType noteType) {
         this.eleve = eleve;
         eleve.getNotes().add(this);
+        matiere.getNotes().add(this);
         this.matiere = matiere;
         this.noteType = noteType;
     }

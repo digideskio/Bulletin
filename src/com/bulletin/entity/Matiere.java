@@ -1,5 +1,7 @@
 package com.bulletin.entity;
 
+import com.bulletin.exception.EleveNotFoundException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +14,11 @@ public class Matiere {
     private String sheetName;
     private Matiere parentMatiere;
     private List<Matiere> childrenMatieres;
+    private List<Note> notes;
 
     public Matiere() {
         this.childrenMatieres = new ArrayList<Matiere>();
+        this.notes = new ArrayList<Note>();
     }
 
     public Matiere(String nom, Matiere parentMatiere) {
@@ -65,6 +69,24 @@ public class Matiere {
         this.sheetName = sheetName;
     }
 
+    public List<Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
+    }
+
+
+    public Note getNoteOfEleve(Eleve e) throws EleveNotFoundException {
+        for(Note note : notes) {
+            if(note.getEleve().equals(e)) {
+                return note;
+            }
+        }
+        throw  new EleveNotFoundException();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -75,6 +97,7 @@ public class Matiere {
         if (childrenMatieres != null ? !childrenMatieres.equals(matiere.childrenMatieres) : matiere.childrenMatieres != null)
             return false;
         if (nom != null ? !nom.equals(matiere.nom) : matiere.nom != null) return false;
+        if (notes != null ? !notes.equals(matiere.notes) : matiere.notes != null) return false;
         if (parentMatiere != null ? !parentMatiere.equals(matiere.parentMatiere) : matiere.parentMatiere != null)
             return false;
         if (sheetName != null ? !sheetName.equals(matiere.sheetName) : matiere.sheetName != null) return false;
@@ -88,6 +111,7 @@ public class Matiere {
         result = 31 * result + (sheetName != null ? sheetName.hashCode() : 0);
         result = 31 * result + (parentMatiere != null ? parentMatiere.hashCode() : 0);
         result = 31 * result + (childrenMatieres != null ? childrenMatieres.hashCode() : 0);
+        result = 31 * result + (notes != null ? notes.hashCode() : 0);
         return result;
     }
 }
