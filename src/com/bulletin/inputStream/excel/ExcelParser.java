@@ -4,6 +4,7 @@ import com.bulletin.entity.*;
 import com.bulletin.exception.EleveNotFoundException;
 import com.bulletin.exception.MatiereNotFoundException;
 import com.bulletin.helper.MatiereHelper;
+import com.bulletin.inputStream.InputStreamParser;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -18,7 +19,7 @@ import java.util.List;
 /**
  * Created by geoffroy on 12/11/14.
  */
-public class ExcelParser {
+public class ExcelParser implements InputStreamParser {
 
     private XSSFWorkbook workbook;
 
@@ -82,7 +83,9 @@ public class ExcelParser {
 
     public Classe getAllNotes(List<Matiere> matieres, Classe classe) throws EleveNotFoundException {
         for(Matiere matiere : matieres) {
-            getNotesOfMatiere(matiere, classe);
+            if(matiere.getChildrenMatieres().size() ==0) {
+                getNotesOfMatiere(matiere, classe);
+            }
         }
         return classe;
 
