@@ -1,4 +1,4 @@
-package com.bulletin.inputStream;
+package com.bulletin.inputStream.excel;
 
 import com.bulletin.entity.*;
 import com.bulletin.exception.EleveNotFoundException;
