@@ -32,4 +32,13 @@ public enum NoteType {
         return numericalValue;
     }
 
+
+    public static NoteType fromShortName(String shortName) {
+        for(NoteType noteType : values()) {
+            if(noteType.getShortName().equals(shortName)) {
+                return noteType;
+            }
+        }
+        throw new IllegalArgumentException();
+    }
 }

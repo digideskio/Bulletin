@@ -1,7 +1,7 @@
 package com.bulletin.inputStream;
 
-import com.bulletin.entity.Eleve;
-import com.bulletin.entity.Matiere;
+import com.bulletin.entity.*;
+import com.bulletin.exception.EleveNotFoundException;
 import com.bulletin.exception.MatiereNotFoundException;
 import com.bulletin.helper.MatiereHelper;
 import org.apache.poi.ss.usermodel.Row;
@@ -28,11 +28,10 @@ public class ExcelParser {
         FileInputStream file = new FileInputStream(new File(path));
         workbook = new XSSFWorkbook(file);
         matiereHelper = new MatiereHelper();
-
     }
 
     // http://howtodoinjava.com/2013/06/19/readingwriting-excel-files-in-java-poi-tutorial/
-    public List<Eleve> getClasse() {
+    public Classe getClasse() {
 
         XSSFSheet sheet = workbook.getSheet(SheetName.ELEVE);
 
@@ -49,7 +48,8 @@ public class ExcelParser {
                 classe.add(eleve);
             }
         }
-        return classe;
+
+        return new Classe(classe);
     }
 
 
@@ -65,7 +65,7 @@ public class ExcelParser {
             if(!row.getCell(0).getStringCellValue().equalsIgnoreCase(ColumnName.NOM)) {
                 Matiere matiere = new Matiere();
                 matiere.setNom(row.getCell(0).getStringCellValue());
-
+                matiere.setSheetName(row.getCell(2).getStringCellValue());
                 if(row.getCell(1) != null) {
                     String parentName = row.getCell(1).getStringCellValue();
                     matiere.setParentMatiere(matiereHelper.getMatiereByName(parentName, matieres));
@@ -76,5 +76,42 @@ public class ExcelParser {
             }
         }
         return matieres;
+    }
+
+
+
+    public Classe getAllNotes(List<Matiere> matieres, Classe classe) throws EleveNotFoundException {
+        for(Matiere matiere : matieres) {
+            getNotesOfMatiere(matiere, classe);
+        }
+        return classe;
+
+    }
+
+
+    private List<Note> getNotesOfMatiere(Matiere matiere, Classe classe) throws EleveNotFoundException {
+        XSSFSheet sheet = workbook.getSheet(matiere.getSheetName());
+
+
+        List<Note> notes = new ArrayList<Note>();
+        //Iterate through each rows one by one
+        Iterator<Row> rowIterator = sheet.iterator();
+        while (rowIterator.hasNext())
+        {
+            Row row = rowIterator.next();
+            if(!row.getCell(0).getStringCellValue().equalsIgnoreCase(ColumnName.NOM)) {
+                String nom = row.getCell(0).getStringCellValue();
+                String prenom = row.getCell(1).getStringCellValue();
+                Eleve eleve = classe.getEleveByNomAndPrenom(nom, prenom);
+
+                Note note = new Note(eleve, matiere, NoteType.fromShortName(row.getCell(2).getStringCellValue()));
+
+                notes.add(note);
+            }
+        }
+        return notes;
+
+
+
     }
 }
