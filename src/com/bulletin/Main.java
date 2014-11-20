@@ -10,6 +10,7 @@ import com.bulletin.inputStream.excel.ExcelParser;
 import com.bulletin.outputStream.WordWriter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,7 +34,16 @@ public class Main {
 
         classe = inputStreamParser.getAllRemarques(classe);
 
-        WordWriter wordWriter = new WordWriter(matieres);
+        List<Matiere> rootMatieres =  new ArrayList<Matiere>();
+
+        for(Matiere m : matieres) {
+            if(m.getParentMatiere() == null) {
+                rootMatieres.add(m);
+            }
+        }
+
+
+        WordWriter wordWriter = new WordWriter(rootMatieres);
 
         for(Eleve eleve : classe.getEleves()) {
             wordWriter.createBulletin(eleve);
