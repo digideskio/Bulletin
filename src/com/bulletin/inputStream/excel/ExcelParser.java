@@ -113,8 +113,26 @@ public class ExcelParser implements InputStreamParser {
             }
         }
         return notes;
+    }
 
 
+    public Classe getAllRemarques(Classe classe) throws EleveNotFoundException {
+        XSSFSheet sheet = workbook.getSheet(ColumnName.REMARQUES);
 
+
+        List<Note> notes = new ArrayList<Note>();
+        //Iterate through each rows one by one
+        Iterator<Row> rowIterator = sheet.iterator();
+        while (rowIterator.hasNext())
+        {
+            Row row = rowIterator.next();
+            if(!row.getCell(0).getStringCellValue().equalsIgnoreCase(ColumnName.NOM)) {
+                String nom = row.getCell(0).getStringCellValue();
+                String prenom = row.getCell(1).getStringCellValue();
+                Eleve eleve = classe.getEleveByNomAndPrenom(nom, prenom);
+                eleve.setRemarque(row.getCell(2).getStringCellValue());
+            }
+        }
+        return classe;
     }
 }

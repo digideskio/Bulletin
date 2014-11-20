@@ -35,4 +35,11 @@ public class Classe {
         throw new EleveNotFoundException();
     }
 
+    public List<Eleve> getEleves() {
+        return eleves;
+    }
+
+    public void setEleves(List<Eleve> eleves) {
+        this.eleves = eleves;
+    }
 }

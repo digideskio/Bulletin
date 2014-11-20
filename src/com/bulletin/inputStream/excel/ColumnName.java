@@ -8,4 +8,6 @@ public interface ColumnName {
     public static final String NOM = "Nom";
 
     public static final String PRENOM = "Prenom";
+
+    public static final String REMARQUES = "Remarques";
 }

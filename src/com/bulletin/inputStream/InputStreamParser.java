@@ -34,4 +34,13 @@ public interface InputStreamParser {
      * @throws EleveNotFoundException
      */
     public Classe getAllNotes(List<Matiere> matieres, Classe classe) throws EleveNotFoundException;
+
+    /**
+     *
+     * @param classe
+     * @return classe
+     * @throws EleveNotFoundException
+     */
+    public Classe getAllRemarques(Classe classe) throws EleveNotFoundException;
 }
+

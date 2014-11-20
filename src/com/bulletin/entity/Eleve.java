@@ -14,6 +14,8 @@ public class Eleve {
 
     private List<Note> notes;
 
+    private String remarque;
+
 
     public Eleve() {
         this.notes = new ArrayList<Note>();
@@ -47,6 +49,14 @@ public class Eleve {
 
     public void setNotes(List<Note> notes) {
         this.notes = notes;
+    }
+
+    public String getRemarque() {
+        return remarque;
+    }
+
+    public void setRemarque(String remarque) {
+        this.remarque = remarque;
     }
 
     public Note getNoteByMatiere(Matiere matiere) {
