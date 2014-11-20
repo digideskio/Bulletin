@@ -22,10 +22,11 @@ public class WordWriter {
     private List<String> xmlOutputString;
     private List<Matiere> rootMatiere;
 
-    private String templateFileName = "template.xml";
+    private String studentTemplateFileName = "oneStudent.xml";
     private String basicBlocTemplate = "basicBloc.xml";
     private String basicLineTemplate = "basicLine.xml";
 
+    private String finalTemplateFileName = "template.xml";
 
     public WordWriter(List<Matiere> rootMatiere) {
         xmlOutputString = new ArrayList<String>();
@@ -62,7 +63,7 @@ public class WordWriter {
 
 
     public void createBulletin(Eleve eleve) {
-        String template = convertXMLFileToString(templateFileName);
+        String template = convertXMLFileToString(studentTemplateFileName);
 
         template = populateHeader(template);
 
@@ -164,10 +165,16 @@ public class WordWriter {
 
             BufferedWriter writer = new BufferedWriter(new FileWriter(destination));
 
+            StringBuilder sb = new StringBuilder();
             for(String bulletin : xmlOutputString) {
-
-                writer.write(bulletin);
+                sb.append(bulletin);
             }
+
+            String fullTemplate = convertXMLFileToString(finalTemplateFileName);
+
+            String bulletin = fullTemplate.replace(Tag.ONE_STUDENT.name(), sb.toString());
+
+            writer.write(bulletin);
             writer.close();
 
         }
