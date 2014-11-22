@@ -5,6 +5,7 @@ import com.bulletin.entity.Eleve;
 import com.bulletin.entity.Matiere;
 import com.bulletin.exception.EleveNotFoundException;
 import com.bulletin.exception.MatiereNotFoundException;
+import com.bulletin.exception.NoteNotFoundException;
 import com.bulletin.inputStream.InputStreamParser;
 import com.bulletin.inputStream.excel.ExcelParser;
 import com.bulletin.outputStream.WordWriter;
@@ -18,9 +19,24 @@ import java.util.List;
  */
 public class Main {
 
-    public static void main(String[] args) throws IOException, MatiereNotFoundException, EleveNotFoundException {
+    public static void main(String[] args) throws IOException, MatiereNotFoundException, EleveNotFoundException, NoteNotFoundException {
+
+        if(args.length != 6) {
+            System.out.println("Usage incorrect");
+            System.out.println("---------------");
+            System.out.println("Usage correct : ");
+            System.out.println("exec pathToExcel pathToOuput studentTemplateFileName basicBlocTemplate basicLineTemplate finalTemplateFileName");
+            return;
+        }
+
 
         String pathToExcel = args[0];
+        String pathToOutput = args[1];
+        String studentTemplateFileName = args[2];
+        String basicBlocTemplate = args[3];
+        String basicLineTemplate = args[4];
+        String finalTemplateFileName = args[5];
+
 
 
         InputStreamParser inputStreamParser = new ExcelParser(pathToExcel);
@@ -43,13 +59,16 @@ public class Main {
         }
 
 
-        WordWriter wordWriter = new WordWriter(rootMatieres);
+        WordWriter wordWriter = new WordWriter(rootMatieres, studentTemplateFileName, basicBlocTemplate, basicLineTemplate, finalTemplateFileName);
 
         for(Eleve eleve : classe.getEleves()) {
             wordWriter.createBulletin(eleve);
         }
 
-        wordWriter.generateWordDoc("test.xml");
+        wordWriter.generateWordDoc(pathToOutput);
+
+
+        System.out.println("Bulletin crées");
 
     }
 }

@@ -5,7 +5,7 @@ package com.bulletin.inputStream.excel;
  */
 public interface SheetName {
 
-    public static final String ELEVE = "Eleve";
+    public static final String ELEVE = "Eleves";
 
-    public static final String MATIERE = "Matiere";
+    public static final String MATIERE = "Liste des Matieres";
 }

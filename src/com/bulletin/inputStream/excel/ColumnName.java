@@ -10,4 +10,6 @@ public interface ColumnName {
     public static final String PRENOM = "Prenom";
 
     public static final String REMARQUES = "Remarques";
+
+    public static final String NOM_MATIERE = "Nom de la matière";
 }

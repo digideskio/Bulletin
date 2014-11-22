@@ -84,7 +84,7 @@ public class Matiere {
                 return note;
             }
         }
-        throw  new EleveNotFoundException();
+        throw  new EleveNotFoundException(e.getNom());
     }
 
     @Override

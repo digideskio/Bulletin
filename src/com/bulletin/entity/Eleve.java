@@ -1,5 +1,7 @@
 package com.bulletin.entity;
 
+import com.bulletin.exception.NoteNotFoundException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,12 +61,12 @@ public class Eleve {
         this.remarque = remarque;
     }
 
-    public Note getNoteByMatiere(Matiere matiere) {
+    public Note getNoteByMatiere(Matiere matiere) throws NoteNotFoundException {
         for(Note note : notes) {
             if(note.getMatiere().equals(matiere)) {
                 return note;
             }
         }
-        return null;
+        throw new NoteNotFoundException(this.getNom(), matiere.getNom());
     }
 }

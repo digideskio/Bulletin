@@ -4,6 +4,7 @@ import com.bulletin.entity.Eleve;
 import com.bulletin.entity.Matiere;
 import com.bulletin.entity.Note;
 import com.bulletin.entity.NoteType;
+import com.bulletin.exception.NoteNotFoundException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -11,6 +12,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -28,9 +31,13 @@ public class WordWriter {
 
     private String finalTemplateFileName = "template.xml";
 
-    public WordWriter(List<Matiere> rootMatiere) {
+    public WordWriter(List<Matiere> rootMatiere, String studentTemplateFileName, String basicBlocTemplate, String basicLineTemplate, String finalTemplateFileName) {
         xmlOutputString = new ArrayList<String>();
         this.rootMatiere = rootMatiere;
+        this.studentTemplateFileName = studentTemplateFileName;
+        this.basicBlocTemplate = basicBlocTemplate;
+        this.basicLineTemplate = basicLineTemplate;
+        this.finalTemplateFileName = finalTemplateFileName;
     }
 
 
@@ -49,11 +56,11 @@ public class WordWriter {
         String nextYearStr = "" + nextYear;
 
 
-        template = template.replaceAll(firstPartCurrentYear.name(), currentYearStr.substring(0,3));
-        template = template.replaceAll(secondtPartCurrentYear.name(), currentYearStr.substring(3));
+        template = template.replace(firstPartCurrentYear.name(), currentYearStr.substring(0,3));
+        template = template.replace(secondtPartCurrentYear.name(), currentYearStr.substring(3));
 
-        template = template.replaceAll(firstPartNextYear.name(), nextYearStr.substring(0,3));
-        template = template.replaceAll(secondtPartNextYear.name(), nextYearStr.substring(3));
+        template = template.replace(firstPartNextYear.name(), nextYearStr.substring(0,3));
+        template = template.replace(secondtPartNextYear.name(), nextYearStr.substring(3));
 
         return template;
     }
@@ -62,7 +69,7 @@ public class WordWriter {
 
 
 
-    public void createBulletin(Eleve eleve) {
+    public void createBulletin(Eleve eleve) throws IOException, NoteNotFoundException {
         String template = convertXMLFileToString(studentTemplateFileName);
 
         template = populateHeader(template);
@@ -81,7 +88,7 @@ public class WordWriter {
 
 
 
-    private String populateMatiere(Matiere rootMatiere, Eleve eleve) {
+    private String populateMatiere(Matiere rootMatiere, Eleve eleve) throws IOException, NoteNotFoundException {
         String basicBloc = convertXMLFileToString(basicBlocTemplate);
 
         basicBloc = basicBloc.replace(Tag.ROOT_MATIERE.name(), rootMatiere.getNom());
@@ -104,12 +111,17 @@ public class WordWriter {
 
 
 
-    private String populateBasicLine(String template, Matiere matiere, Eleve eleve) {
+    private String populateBasicLine(String template, Matiere matiere, Eleve eleve) throws NoteNotFoundException {
         template = template.replace(Tag.MATIERE_NAME.name(), matiere.getNom());
 
-        Note note = eleve.getNoteByMatiere(matiere);
+        if(matiere.getSheetName() != null) {
+            Note note = eleve.getNoteByMatiere(matiere);
 
-        return replaceTagWithNoteInTemplate(template, note);
+            return replaceTagWithNoteInTemplate(template, note);
+        }
+        else {
+            return template;
+        }
 
     }
 
@@ -201,9 +213,12 @@ public class WordWriter {
     }
 
 
-    private String convertXMLFileToString(String fileName)
-    {
-        try{
+    private String convertXMLFileToString(String fileName) throws IOException {
+
+        byte[] encoded = Files.readAllBytes(Paths.get(fileName));
+        return new String(encoded);
+
+        /*try{
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             InputStream inputStream = new FileInputStream(new File(fileName));
             org.w3c.dom.Document doc = documentBuilderFactory.newDocumentBuilder().parse(inputStream);
@@ -215,7 +230,7 @@ public class WordWriter {
         catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return null;*/
     }
 
 }

@@ -18,7 +18,8 @@ public class MatiereHelper {
                 return matiere;
             }
         }
-        throw new MatiereNotFoundException();
+        System.out.println("Matiere not found :"  + name);
+        throw new MatiereNotFoundException(name);
     }
 
     public List<Matiere> getRootMatieres(List<Matiere> matieres) {

@@ -43,6 +43,10 @@ public class ExcelParser implements InputStreamParser {
         {
             Row row = rowIterator.next();
 
+            if(row.getCell(0) == null || row.getCell(1) == null ) {
+                continue;
+            }
+
             String nom = row.getCell(0).getStringCellValue();
             String prenom = row.getCell(1).getStringCellValue();
 
@@ -76,13 +80,23 @@ public class ExcelParser implements InputStreamParser {
         while (rowIterator.hasNext())
         {
             Row row = rowIterator.next();
-            if(!row.getCell(0).getStringCellValue().equalsIgnoreCase(ColumnName.NOM)) {
+
+            if(row.getCell(0) == null) {
+                continue;
+            }
+
+
+            if(!row.getCell(0).getStringCellValue().equalsIgnoreCase(ColumnName.NOM_MATIERE)) {
                 Matiere matiere = new Matiere();
                 matiere.setNom(row.getCell(0).getStringCellValue());
-                matiere.setSheetName(row.getCell(2).getStringCellValue());
+
                 if(row.getCell(1) != null) {
                     String parentName = row.getCell(1).getStringCellValue();
                     matiere.setParentMatiere(matiereHelper.getMatiereByName(parentName, matieres));
+
+                    if(row.getCell(2) != null) {
+                        matiere.setSheetName(row.getCell(2).getStringCellValue());
+                    }
                 } else {
                     matiere.setParentMatiere(null);
                 }
@@ -115,9 +129,27 @@ public class ExcelParser implements InputStreamParser {
         while (rowIterator.hasNext())
         {
             Row row = rowIterator.next();
-            if(!row.getCell(0).getStringCellValue().equalsIgnoreCase(ColumnName.NOM)) {
-                String nom = row.getCell(0).getStringCellValue();
-                String prenom = row.getCell(1).getStringCellValue();
+
+            if(row.getCell(0) == null || row.getCell(1) == null ) {
+                continue;
+            }
+
+            String nom = row.getCell(0).getStringCellValue();
+            String prenom = row.getCell(1).getStringCellValue();
+
+            if(nom != null) {
+                nom = nom.trim();
+            }
+
+            if(prenom != null) {
+                prenom = prenom.trim();
+            }
+
+            if("/".equalsIgnoreCase(nom) || "/".equalsIgnoreCase(prenom) ) {
+                continue;
+            }
+
+            if(!ColumnName.NOM.equalsIgnoreCase(nom)) {
                 Eleve eleve = classe.getEleveByNomAndPrenom(nom, prenom);
 
                 Note note = new Note(eleve, matiere, NoteType.fromShortName(row.getCell(2).getStringCellValue()));
@@ -139,9 +171,26 @@ public class ExcelParser implements InputStreamParser {
         while (rowIterator.hasNext())
         {
             Row row = rowIterator.next();
-            if(!row.getCell(0).getStringCellValue().equalsIgnoreCase(ColumnName.NOM)) {
-                String nom = row.getCell(0).getStringCellValue();
-                String prenom = row.getCell(1).getStringCellValue();
+            if(row.getCell(0) == null || row.getCell(1) == null ) {
+                continue;
+            }
+
+            String nom = row.getCell(0).getStringCellValue();
+            String prenom = row.getCell(1).getStringCellValue();
+
+            if(nom != null) {
+                nom = nom.trim();
+            }
+
+            if(prenom != null) {
+                prenom = prenom.trim();
+            }
+
+            if("/".equalsIgnoreCase(nom) || "/".equalsIgnoreCase(prenom) ) {
+                continue;
+            }
+            if(!ColumnName.NOM.equalsIgnoreCase(nom)) {
+
                 Eleve eleve = classe.getEleveByNomAndPrenom(nom, prenom);
                 eleve.setRemarque(row.getCell(2).getStringCellValue());
             }
