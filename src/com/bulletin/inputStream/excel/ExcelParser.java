@@ -42,10 +42,23 @@ public class ExcelParser implements InputStreamParser {
         while (rowIterator.hasNext())
         {
             Row row = rowIterator.next();
-            if(!row.getCell(0).getStringCellValue().equalsIgnoreCase(ColumnName.NOM)) {
+
+            String nom = row.getCell(0).getStringCellValue();
+            String prenom = row.getCell(1).getStringCellValue();
+
+            if(nom != null) {
+                nom = nom.trim();
+            }
+
+            if(prenom != null) {
+                prenom = prenom.trim();
+            }
+
+            if(!ColumnName.NOM.equalsIgnoreCase(nom) && !ColumnName.PRENOM.equalsIgnoreCase(prenom)
+                    && !"/".equalsIgnoreCase(nom) && !"/".equalsIgnoreCase(prenom)) {
                 Eleve eleve = new Eleve();
-                eleve.setNom(row.getCell(0).getStringCellValue());
-                eleve.setPrenom(row.getCell(1).getStringCellValue());
+                eleve.setNom(nom);
+                eleve.setPrenom(prenom);
                 classe.add(eleve);
             }
         }
