@@ -7,9 +7,9 @@ public enum Tag {
 
     ROOT_MATIERE("##ROOTMATIERE##"),
     NOM("##NOM##"),
-    PRENOM("##PRENOM"),
+    PRENOM("##PRENOM##"),
     BASIC_LINE("##BASICLINE##"),
-    MATIERE_NAME("MATIERE_NAME"),
+    MATIERE_NAME("#MATIERE_NAME#"),
     R("#R#"),
     RF("#RF#"),
     NR("#NR#"),
@@ -26,9 +26,17 @@ public enum Tag {
     ONE_STUDENT("##ONE_STUDENT##");
 
 
-    private String name;
+    private String shortName;
 
     private Tag(String name) {
-        this.name = name;
+        this.shortName = name;
+    }
+
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 }

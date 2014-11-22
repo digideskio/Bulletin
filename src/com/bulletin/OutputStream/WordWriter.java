@@ -56,15 +56,20 @@ public class WordWriter {
         String nextYearStr = "" + nextYear;
 
 
-        template = template.replace(firstPartCurrentYear.name(), currentYearStr.substring(0,3));
-        template = template.replace(secondtPartCurrentYear.name(), currentYearStr.substring(3));
+        template = template.replace(firstPartCurrentYear.getShortName(), currentYearStr.substring(0, 3));
+        template = template.replace(secondtPartCurrentYear.getShortName(), currentYearStr.substring(3));
 
-        template = template.replace(firstPartNextYear.name(), nextYearStr.substring(0,3));
-        template = template.replace(secondtPartNextYear.name(), nextYearStr.substring(3));
+        template = template.replace(firstPartNextYear.getShortName(), nextYearStr.substring(0, 3));
+        template = template.replace(secondtPartNextYear.getShortName(), nextYearStr.substring(3));
 
         return template;
     }
 
+
+    private String populateNomPrenom(String template, Eleve eleve) {
+        template = template.replace(Tag.PRENOM.getShortName(),eleve.getPrenom());
+        return template.replace(Tag.NOM.getShortName(),eleve.getNom());
+    }
 
 
 
@@ -72,16 +77,17 @@ public class WordWriter {
     public void createBulletin(Eleve eleve) throws IOException, NoteNotFoundException {
         String template = convertXMLFileToString(studentTemplateFileName);
 
-        template = populateHeader(template);
+        //template = populateHeader(template);
+        template = populateNomPrenom(template, eleve);
 
         StringBuilder sb = new StringBuilder();
         for(Matiere root : rootMatiere) {
             sb.append(populateMatiere(root, eleve));
         }
 
-        template = template.replace(Tag.CONTENT.name(), sb.toString());
+        template = template.replace(Tag.CONTENT.getShortName(), sb.toString());
 
-        template = template.replace(Tag.REMARQUE.name(), xmlEncode("REMARQUE"));
+        template = template.replace(Tag.REMARQUE.getShortName(), xmlEncode("REMARQUE"));
 
         xmlOutputString.add(template);
     }
@@ -91,20 +97,21 @@ public class WordWriter {
     private String populateMatiere(Matiere rootMatiere, Eleve eleve) throws IOException, NoteNotFoundException {
         String basicBloc = convertXMLFileToString(basicBlocTemplate);
 
-        basicBloc = basicBloc.replace(Tag.ROOT_MATIERE.name(), rootMatiere.getNom());
+        basicBloc = basicBloc.replace(Tag.ROOT_MATIERE.getShortName(), rootMatiere.getNom());
 
+        StringBuilder sb = new StringBuilder();
         for(Matiere matiere : rootMatiere.getChildrenMatieres()) {
-            if(matiere.getChildrenMatieres() == null || matiere.getChildrenMatieres().size() ==  0) {
-                basicBloc = basicBloc.replace(Tag.BASIC_LINE.name(), populateMatiere(matiere, eleve));
+            if(matiere.getChildrenMatieres() != null && matiere.getChildrenMatieres().size() >  0) {
+                basicBloc = basicBloc.replace(Tag.BASIC_LINE.getShortName(), populateMatiere(matiere, eleve));
             } else {
                 String basicLine = convertXMLFileToString(basicLineTemplate);
-
                 basicLine = populateBasicLine(basicLine, matiere, eleve);
+                sb.append(basicLine);
 
-                basicBloc = basicBloc.replace(Tag.BASIC_LINE.name(), basicLine);
 
             }
         }
+        basicBloc = basicBloc.replace(Tag.BASIC_LINE.getShortName(), sb.toString());
         return basicBloc;
 
     }
@@ -112,11 +119,10 @@ public class WordWriter {
 
 
     private String populateBasicLine(String template, Matiere matiere, Eleve eleve) throws NoteNotFoundException {
-        template = template.replace(Tag.MATIERE_NAME.name(), matiere.getNom());
+        template = template.replace(Tag.MATIERE_NAME.getShortName(), matiere.getNom());
 
         if(matiere.getSheetName() != null) {
             Note note = eleve.getNoteByMatiere(matiere);
-
             return replaceTagWithNoteInTemplate(template, note);
         }
         else {
@@ -131,7 +137,7 @@ public class WordWriter {
         Map<Tag, String> tagValue = getTagValueMap(note);
 
         for(Map.Entry<Tag,String> entry : tagValue.entrySet()) {
-            template = template.replace(entry.getKey().name(),entry.getValue());
+            template = template.replace(entry.getKey().getShortName(),entry.getValue());
         }
 
         return template;
@@ -184,7 +190,9 @@ public class WordWriter {
 
             String fullTemplate = convertXMLFileToString(finalTemplateFileName);
 
-            String bulletin = fullTemplate.replace(Tag.ONE_STUDENT.name(), sb.toString());
+            fullTemplate = populateHeader(fullTemplate);
+
+            String bulletin = fullTemplate.replace(Tag.ONE_STUDENT.getShortName(), sb.toString());
 
             writer.write(bulletin);
             writer.close();
