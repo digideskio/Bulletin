@@ -6,11 +6,7 @@ import com.bulletin.entity.Note;
 import com.bulletin.entity.NoteType;
 import com.bulletin.exception.NoteNotFoundException;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -28,16 +24,19 @@ public class WordWriter {
     private String studentTemplateFileName = "oneStudent.xml";
     private String basicBlocTemplate = "basicBloc.xml";
     private String basicLineTemplate = "basicLine.xml";
-
+    private String subMatiereTemplate = "";
     private String finalTemplateFileName = "template.xml";
 
-    public WordWriter(List<Matiere> rootMatiere, String studentTemplateFileName, String basicBlocTemplate, String basicLineTemplate, String finalTemplateFileName) {
+    private int lineCounter = 0;
+
+    public WordWriter(List<Matiere> rootMatiere, String studentTemplateFileName, String basicBlocTemplate, String basicLineTemplate, String finalTemplateFileName, String subMatiereTemplate) {
         xmlOutputString = new ArrayList<String>();
         this.rootMatiere = rootMatiere;
         this.studentTemplateFileName = studentTemplateFileName;
         this.basicBlocTemplate = basicBlocTemplate;
         this.basicLineTemplate = basicLineTemplate;
         this.finalTemplateFileName = finalTemplateFileName;
+        this.subMatiereTemplate =  subMatiereTemplate;
     }
 
 
@@ -81,13 +80,19 @@ public class WordWriter {
         template = populateNomPrenom(template, eleve);
 
         StringBuilder sb = new StringBuilder();
+        int nbMatiere = 0;
+        this.lineCounter = 0;
         for(Matiere root : rootMatiere) {
             sb.append(populateMatiere(root, eleve));
+            nbMatiere++;
+            if(nbMatiere == 2 && this.lineCounter < 35) {
+                sb.append(populateEmptyLines(35-this.lineCounter));
+            }
         }
 
         template = template.replace(Tag.CONTENT.getShortName(), sb.toString());
 
-        template = template.replace(Tag.REMARQUE.getShortName(), xmlEncode("REMARQUE"));
+        template = template.replace(Tag.REMARQUE.getShortName(), xmlEncode(eleve.getPrenom() + " " + eleve.getRemarque()));
 
         xmlOutputString.add(template);
     }
@@ -98,24 +103,57 @@ public class WordWriter {
         String basicBloc = convertXMLFileToString(basicBlocTemplate);
 
         basicBloc = basicBloc.replace(Tag.ROOT_MATIERE.getShortName(), rootMatiere.getNom());
+        this.lineCounter++;
 
         StringBuilder sb = new StringBuilder();
         for(Matiere matiere : rootMatiere.getChildrenMatieres()) {
-            if(matiere.getChildrenMatieres() != null && matiere.getChildrenMatieres().size() >  0) {
-                basicBloc = basicBloc.replace(Tag.BASIC_LINE.getShortName(), populateMatiere(matiere, eleve));
-            } else {
-                String basicLine = convertXMLFileToString(basicLineTemplate);
-                basicLine = populateBasicLine(basicLine, matiere, eleve);
-                sb.append(basicLine);
-
-
-            }
+            // TODO make this method works !
+            sb.append(populateSubMatiere(matiere, eleve));
         }
         basicBloc = basicBloc.replace(Tag.BASIC_LINE.getShortName(), sb.toString());
         return basicBloc;
 
     }
 
+    private String populateEmptyLines(int numberOfLine) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        for(int i=0; i<numberOfLine; i++) {
+            String basicLine = convertXMLFileToString(basicLineTemplate);
+            basicLine = basicLine.replace(Tag.MATIERE_NAME.getShortName(), "");
+            basicLine = basicLine.replace(Tag.R.getShortName(), "");
+            basicLine = basicLine.replace(Tag.RF.getShortName(), "");
+            basicLine = basicLine.replace(Tag.RM.getShortName(), "");
+            basicLine = basicLine.replace(Tag.RR.getShortName(), "");
+            basicLine = basicLine.replace(Tag.NR.getShortName(), "");
+            this.lineCounter++;
+
+            sb.append(basicLine);
+        }
+        return sb.toString();
+    }
+
+
+    private String populateSubMatiere(Matiere subMatiere, Eleve eleve) throws IOException, NoteNotFoundException {
+        String subBloc = convertXMLFileToString(subMatiereTemplate);
+
+        if(subMatiere.getChildrenMatieres() == null || subMatiere.getChildrenMatieres().isEmpty()) {
+            String basicLine = convertXMLFileToString(basicLineTemplate);
+            basicLine = populateBasicLine(basicLine, subMatiere, eleve);
+            this.lineCounter++;
+            return basicLine;
+        }
+
+
+        subBloc = subBloc.replace(Tag.SUB_MATIERE.getShortName(), subMatiere.getNom());
+        this.lineCounter++;
+        StringBuilder sb = new StringBuilder();
+        for(Matiere m : subMatiere.getChildrenMatieres()) {
+            sb.append(populateSubMatiere(m, eleve));
+
+        }
+        return subBloc.replace(Tag.BASIC_LINE.getShortName(), sb.toString());
+
+    }
 
 
     private String populateBasicLine(String template, Matiere matiere, Eleve eleve) throws NoteNotFoundException {

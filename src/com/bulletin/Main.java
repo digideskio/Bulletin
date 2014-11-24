@@ -21,11 +21,11 @@ public class Main {
 
     public static void main(String[] args) throws IOException, MatiereNotFoundException, EleveNotFoundException, NoteNotFoundException {
 
-        if(args.length != 6) {
+        if(args.length != 7) {
             System.out.println("Usage incorrect");
             System.out.println("---------------");
             System.out.println("Usage correct : ");
-            System.out.println("exec pathToExcel pathToOuput studentTemplateFileName basicBlocTemplate basicLineTemplate finalTemplateFileName");
+            System.out.println("exec pathToExcel pathToOuput studentTemplateFileName basicBlocTemplate basicLineTemplate subMatiereTemplate finalTemplateFileName");
             return;
         }
 
@@ -35,7 +35,8 @@ public class Main {
         String studentTemplateFileName = args[2];
         String basicBlocTemplate = args[3];
         String basicLineTemplate = args[4];
-        String finalTemplateFileName = args[5];
+        String subMatiereTemplate = args[5];
+        String finalTemplateFileName = args[6];
 
 
 
@@ -59,7 +60,7 @@ public class Main {
         }
 
 
-        WordWriter wordWriter = new WordWriter(rootMatieres, studentTemplateFileName, basicBlocTemplate, basicLineTemplate, finalTemplateFileName);
+        WordWriter wordWriter = new WordWriter(rootMatieres, studentTemplateFileName, basicBlocTemplate, basicLineTemplate, finalTemplateFileName, subMatiereTemplate);
 
         for(Eleve eleve : classe.getEleves()) {
             wordWriter.createBulletin(eleve);
