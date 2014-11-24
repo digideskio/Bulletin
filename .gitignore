@@ -16,3 +16,5 @@ lib/poi-3.10.1/docs
 bin/
 
 out/
+
+exec/template
