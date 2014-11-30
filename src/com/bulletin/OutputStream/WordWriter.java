@@ -107,7 +107,6 @@ public class WordWriter {
 
         StringBuilder sb = new StringBuilder();
         for(Matiere matiere : rootMatiere.getChildrenMatieres()) {
-            // TODO make this method works !
             sb.append(populateSubMatiere(matiere, eleve));
         }
         basicBloc = basicBloc.replace(Tag.BASIC_LINE.getShortName(), sb.toString());
@@ -192,20 +191,20 @@ public class WordWriter {
 
         switch (note.getNoteType()) {
             case R:
-                tagValue.replace(Tag.R, NoteType.R.getShortName());
-                break;
+                tagValue.replace(Tag.R, NoteType.R.getDisplayValue());
+            break;
             case RF:
-                tagValue.replace(Tag.RF, NoteType.RF.getShortName());
+                tagValue.replace(Tag.RF, NoteType.RF.getDisplayValue());
                 break;
             case RM:
-                tagValue.replace(Tag.RM, NoteType.RM.getShortName());
+                tagValue.replace(Tag.RM, NoteType.RM.getDisplayValue());
                 break;
             case RR:
-                tagValue.replace(Tag.RR, NoteType.RR.getShortName());
+                tagValue.replace(Tag.RR, NoteType.RR.getDisplayValue());
                 break;
 
             case NR:
-                tagValue.replace(Tag.NR, NoteType.NR.getShortName());
+                tagValue.replace(Tag.NR, NoteType.NR.getDisplayValue());
                 break;
             default:
                 break;
