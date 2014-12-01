@@ -8,7 +8,8 @@ public enum NoteType {
     RR("RR", "Réussite Rare", 1, "X"),
     R("R","Réussite", 4, "X"),
     RM("RM", "Réussite Moyenne", 2, "X"),
-    RF("RF", "Réussite Fréquente", 3, "X");
+    RF("RF", "Réussite Fréquente", 3, "X"),
+    ABS("","Absent",-1,"");
 
     private String shortName;
     private String name;

@@ -152,7 +152,13 @@ public class ExcelParser implements InputStreamParser {
             if(!ColumnName.NOM.equalsIgnoreCase(nom)) {
                 Eleve eleve = classe.getEleveByNomAndPrenom(nom, prenom);
 
-                Note note = new Note(eleve, matiere, NoteType.fromShortName(row.getCell(2).getStringCellValue()));
+                String noteString = row.getCell(2).getStringCellValue();
+                Note note;
+                if(noteString != null && !noteString.trim().equals("")) {
+                    note = new Note(eleve, matiere, NoteType.fromShortName(noteString));
+                } else {
+                    note = new Note(eleve, matiere, NoteType.ABS);
+                }
 
                 notes.add(note);
             }
