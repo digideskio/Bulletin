@@ -32,7 +32,7 @@ public class Classe {
                 return eleve;
             }
         }
-        throw new EleveNotFoundException(nom);
+        throw new EleveNotFoundException(nom + " " + prenom);
     }
 
     public List<Eleve> getEleves() {

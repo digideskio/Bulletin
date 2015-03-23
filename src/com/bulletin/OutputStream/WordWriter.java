@@ -17,6 +17,7 @@ import java.util.*;
  */
 public class WordWriter {
 
+    private static int number_of_line_on_first_page = 50;
 
     private List<String> xmlOutputString;
     private List<Matiere> rootMatiere;
@@ -45,21 +46,15 @@ public class WordWriter {
         int currentYear = calendar.get(Calendar.YEAR);
         int nextYear = currentYear + 1;
 
-        Tag firstPartCurrentYear = Tag.FIRST_YEAR_3_CHARS;
-        Tag secondtPartCurrentYear = Tag.FIRST_YEAR_LAST_CHAR;
-
-        Tag firstPartNextYear = Tag.SECOND_YEAR_3_CHARS;
-        Tag secondtPartNextYear = Tag.SECOND_YEAR_LAST_CHAR;
+        Tag firstYear = Tag.FIRST_YEAR;
+        Tag secondYear = Tag.SECOND_YEAR;
 
         String currentYearStr = "" + currentYear;
         String nextYearStr = "" + nextYear;
 
 
-        template = template.replace(firstPartCurrentYear.getShortName(), currentYearStr.substring(0, 3));
-        template = template.replace(secondtPartCurrentYear.getShortName(), currentYearStr.substring(3));
-
-        template = template.replace(firstPartNextYear.getShortName(), nextYearStr.substring(0, 3));
-        template = template.replace(secondtPartNextYear.getShortName(), nextYearStr.substring(3));
+        template = template.replace(firstYear.getShortName(), currentYearStr);
+        template = template.replace(secondYear.getShortName(), nextYearStr);
 
         return template;
     }
@@ -85,8 +80,8 @@ public class WordWriter {
         for(Matiere root : rootMatiere) {
             sb.append(populateMatiere(root, eleve));
             nbMatiere++;
-            if(nbMatiere == 2 && this.lineCounter < 35) {
-                sb.append(populateEmptyLines(35-this.lineCounter));
+            if(nbMatiere == 2 && this.lineCounter < number_of_line_on_first_page) {
+                sb.append(populateEmptyLines(number_of_line_on_first_page-this.lineCounter));
             }
         }
 
@@ -135,7 +130,7 @@ public class WordWriter {
     private String populateSubMatiere(Matiere subMatiere, Eleve eleve) throws IOException, NoteNotFoundException {
         String subBloc = convertXMLFileToString(subMatiereTemplate);
 
-        if(subMatiere.getChildrenMatieres() == null || subMatiere.getChildrenMatieres().isEmpty()) {
+        if(subMatiere.getSheetName() != null && (subMatiere.getChildrenMatieres() == null || subMatiere.getChildrenMatieres().isEmpty())) {
             String basicLine = convertXMLFileToString(basicLineTemplate);
             basicLine = populateBasicLine(basicLine, subMatiere, eleve);
             this.lineCounter++;

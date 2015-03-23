@@ -6,6 +6,7 @@ import com.bulletin.exception.MatiereNotFoundException;
 import com.bulletin.helper.MatiereHelper;
 import com.bulletin.inputStream.InputStreamParser;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.util.StringUtil;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -110,7 +111,7 @@ public class ExcelParser implements InputStreamParser {
 
     public Classe getAllNotes(List<Matiere> matieres, Classe classe) throws EleveNotFoundException {
         for(Matiere matiere : matieres) {
-            if(matiere.getChildrenMatieres().size() ==0) {
+            if(matiere.getChildrenMatieres().size() ==0 && matiere.getSheetName() != null && !matiere.getSheetName().trim().equals("")) {
                 getNotesOfMatiere(matiere, classe);
             }
         }

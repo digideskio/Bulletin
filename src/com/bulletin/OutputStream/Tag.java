@@ -24,7 +24,9 @@ public enum Tag {
     SECOND_YEAR_3_CHARS("#SECOND_YEAR_3_CHARS#"),
     SECOND_YEAR_LAST_CHAR("#SECOND_YEAR_LAST_CHARS#"),
     ONE_STUDENT("##ONE_STUDENT##"),
-    SUB_MATIERE("##SUBMATIERE##");
+    SUB_MATIERE("##SUBMATIERE##"),
+    FIRST_YEAR("##FIRST_YEAR##"),
+    SECOND_YEAR("##SECOND_YEAR##");
 
 
     private String shortName;
