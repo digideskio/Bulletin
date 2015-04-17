@@ -91,7 +91,7 @@ public class ExcelParser implements InputStreamParser {
                 Matiere matiere = new Matiere();
                 matiere.setNom(row.getCell(0).getStringCellValue());
 
-                if(row.getCell(1) != null) {
+                if(row.getCell(1) != null && !row.getCell(1).getStringCellValue().equals("")) {
                     String parentName = row.getCell(1).getStringCellValue();
                     matiere.setParentMatiere(matiereHelper.getMatiereByName(parentName, matieres));
 

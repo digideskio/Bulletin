@@ -80,7 +80,9 @@ public class WordWriter {
         for(Matiere root : rootMatiere) {
             sb.append(populateMatiere(root, eleve));
             nbMatiere++;
-            if(nbMatiere == 2 && this.lineCounter < number_of_line_on_first_page) {
+            sb.append(populateEmptyLines(1));
+
+            if(nbMatiere == 6 && this.lineCounter < number_of_line_on_first_page) {
                 sb.append(populateEmptyLines(number_of_line_on_first_page-this.lineCounter));
             }
         }
@@ -154,8 +156,24 @@ public class WordWriter {
         template = template.replace(Tag.MATIERE_NAME.getShortName(), matiere.getNom());
 
         if(matiere.getSheetName() != null) {
-            Note note = eleve.getNoteByMatiere(matiere);
-            return replaceTagWithNoteInTemplate(template, note);
+            if (!matiere.getSheetName().equals("")) {
+                Note note = eleve.getNoteByMatiere(matiere);
+                return replaceTagWithNoteInTemplate(template, note);
+            } else {
+                Map<Tag, String> tagValue = new HashMap<Tag, String>();
+
+                tagValue.put(Tag.R, "");
+                tagValue.put(Tag.RF, "");
+                tagValue.put(Tag.RM, "");
+                tagValue.put(Tag.RR, "");
+                tagValue.put(Tag.NR, "");
+
+                for(Map.Entry<Tag,String> entry : tagValue.entrySet()) {
+                    template = template.replace(entry.getKey().getShortName(),entry.getValue());
+                }
+
+                return template;
+            }
         }
         else {
             return template;
@@ -237,10 +255,9 @@ public class WordWriter {
 
     /**
      * Encodes regular text to XML.
-     * @param text
+     * @param text text to encode as XML
      * @return string
-     * @author http://dinoch.dyndns.org:7070/WordML/AboutWordML.jsp
-     * @date 20050328
+     *
      */
     private String xmlEncode(String text) {
         int[] charsRequiringEncoding = {38, 60, 62, 34, 61, 39};
