@@ -77,16 +77,6 @@ public class Matiere {
         this.notes = notes;
     }
 
-
-    public Note getNoteOfEleve(Eleve e) throws EleveNotFoundException {
-        for(Note note : notes) {
-            if(note.getEleve().equals(e)) {
-                return note;
-            }
-        }
-        throw  new EleveNotFoundException(e.getNom());
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

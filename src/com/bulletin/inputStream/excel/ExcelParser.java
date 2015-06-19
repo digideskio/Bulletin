@@ -6,7 +6,6 @@ import com.bulletin.exception.MatiereNotFoundException;
 import com.bulletin.helper.MatiereHelper;
 import com.bulletin.inputStream.InputStreamParser;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.util.StringUtil;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -24,12 +23,9 @@ public class ExcelParser implements InputStreamParser {
 
     private XSSFWorkbook workbook;
 
-    private MatiereHelper matiereHelper;
-
     public ExcelParser(String path) throws IOException {
         FileInputStream file = new FileInputStream(new File(path));
         workbook = new XSSFWorkbook(file);
-        matiereHelper = new MatiereHelper();
     }
 
     // http://howtodoinjava.com/2013/06/19/readingwriting-excel-files-in-java-poi-tutorial/
@@ -93,7 +89,7 @@ public class ExcelParser implements InputStreamParser {
 
                 if(row.getCell(1) != null && !row.getCell(1).getStringCellValue().equals("")) {
                     String parentName = row.getCell(1).getStringCellValue();
-                    matiere.setParentMatiere(matiereHelper.getMatiereByName(parentName, matieres));
+                    matiere.setParentMatiere(MatiereHelper.getMatiereByName(parentName, matieres));
 
                     if(row.getCell(2) != null) {
                         matiere.setSheetName(row.getCell(2).getStringCellValue());

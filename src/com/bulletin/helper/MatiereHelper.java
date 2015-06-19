@@ -12,7 +12,7 @@ import java.util.List;
 public class MatiereHelper {
 
 
-    public Matiere getMatiereByName(String name, List<Matiere> matieres) throws MatiereNotFoundException {
+    public static Matiere getMatiereByName(String name, List<Matiere> matieres) throws MatiereNotFoundException {
         for(Matiere matiere : matieres) {
             if(matiere.getNom().equals(name)) {
                 return matiere;
@@ -20,15 +20,5 @@ public class MatiereHelper {
         }
         System.out.println("Matiere not found :"  + name);
         throw new MatiereNotFoundException(name);
-    }
-
-    public List<Matiere> getRootMatieres(List<Matiere> matieres) {
-        List<Matiere> roots = new ArrayList<Matiere>();
-        for(Matiere matiere : matieres) {
-            if(matiere.getParentMatiere() == null ) {
-                roots.add(matiere);
-            }
-        }
-        return roots;
     }
 }

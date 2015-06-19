@@ -17,7 +17,10 @@ import java.util.*;
  */
 public class WordWriter {
 
-    private static int number_of_line_on_first_page = 50;
+    private static int FIRST_YEAR = 2014;
+    private static int SECOND_YEAR = 2015;
+
+    private static int number_of_line_on_first_page = 51;
 
     private List<String> xmlOutputString;
     private List<Matiere> rootMatiere;
@@ -42,15 +45,12 @@ public class WordWriter {
 
 
     private String populateHeader(String template) {
-        Calendar calendar = Calendar.getInstance();
-        int currentYear = calendar.get(Calendar.YEAR);
-        int nextYear = currentYear + 1;
 
         Tag firstYear = Tag.FIRST_YEAR;
         Tag secondYear = Tag.SECOND_YEAR;
 
-        String currentYearStr = "" + currentYear;
-        String nextYearStr = "" + nextYear;
+        String currentYearStr = "" + FIRST_YEAR;
+        String nextYearStr = "" + SECOND_YEAR;
 
 
         template = template.replace(firstYear.getShortName(), currentYearStr);
