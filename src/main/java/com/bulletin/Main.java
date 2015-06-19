@@ -63,7 +63,9 @@ public class Main {
         WordWriter wordWriter = new WordWriter(rootMatieres, studentTemplateFileName, basicBlocTemplate, basicLineTemplate, finalTemplateFileName, subMatiereTemplate);
 
         for(Eleve eleve : classe.getEleves()) {
-            wordWriter.createBulletin(eleve);
+            //if(!eleve.getNom().equals("El Aroui") && !eleve.getPrenom().equals("Kanza")) {
+                wordWriter.createBulletin(eleve);
+            //}
         }
 
         wordWriter.generateWordDoc(pathToOutput);
