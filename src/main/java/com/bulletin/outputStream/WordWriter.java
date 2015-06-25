@@ -20,7 +20,7 @@ public class WordWriter {
     private static int FIRST_YEAR = 2014;
     private static int SECOND_YEAR = 2015;
 
-    private static int number_of_line_on_first_page = 51;
+    private static int NUMBER_OF_LINE_ON_FIRST_PAGE = 51;
 
     private List<String> xmlOutputString;
     private List<Matiere> rootMatiere;
@@ -71,7 +71,6 @@ public class WordWriter {
     public void createBulletin(Eleve eleve) throws IOException, NoteNotFoundException {
         String template = convertXMLFileToString(studentTemplateFileName);
 
-        //template = populateHeader(template);
         template = populateNomPrenom(template, eleve);
 
         StringBuilder sb = new StringBuilder();
@@ -82,8 +81,8 @@ public class WordWriter {
             nbMatiere++;
             sb.append(populateEmptyLines(1));
 
-            if(nbMatiere == 6 && this.lineCounter < number_of_line_on_first_page) {
-                sb.append(populateEmptyLines(number_of_line_on_first_page-this.lineCounter));
+            if(nbMatiere == 6 && this.lineCounter < NUMBER_OF_LINE_ON_FIRST_PAGE) {
+                sb.append(populateEmptyLines(NUMBER_OF_LINE_ON_FIRST_PAGE -this.lineCounter));
             }
         }
 
@@ -147,6 +146,7 @@ public class WordWriter {
             sb.append(populateSubMatiere(m, eleve));
 
         }
+        sb.append(populateEmptyLines(1));
         return subBloc.replace(Tag.BASIC_LINE.getShortName(), sb.toString());
 
     }
