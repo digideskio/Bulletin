@@ -17,10 +17,11 @@ import java.util.*;
  */
 public class WordWriter {
 
-    private static int FIRST_YEAR = 2014;
-    private static int SECOND_YEAR = 2015;
+    private static final int FIRST_YEAR = 2014;
+    private static final int SECOND_YEAR = 2015;
+    private static final Trimester CURRENT_TRIMESTER = Trimester.THIRD_TRIMESTER;
 
-    private static int NUMBER_OF_LINE_ON_FIRST_PAGE = 51;
+    private static final int NUMBER_OF_LINE_ON_FIRST_PAGE = 51;
 
     private List<String> xmlOutputString;
     private List<Matiere> rootMatiere;
@@ -72,6 +73,7 @@ public class WordWriter {
         String template = convertXMLFileToString(studentTemplateFileName);
 
         template = populateNomPrenom(template, eleve);
+        template = populateTrimester(template);
 
         StringBuilder sb = new StringBuilder();
         int nbMatiere = 0;
@@ -93,6 +95,10 @@ public class WordWriter {
         xmlOutputString.add(template);
     }
 
+    private String populateTrimester(String template) {
+        template = template.replace(Tag.TRIMESTER_NUMBER.getShortName(),CURRENT_TRIMESTER.getNumber().toString());
+        return template.replace(Tag.TRIMESTER_UPPER.getShortName(),CURRENT_TRIMESTER.getExposant());
+    }
 
 
     private String populateMatiere(Matiere rootMatiere, Eleve eleve) throws IOException, NoteNotFoundException {
