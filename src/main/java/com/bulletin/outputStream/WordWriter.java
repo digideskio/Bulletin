@@ -1,5 +1,6 @@
 package com.bulletin.outputStream;
 
+import com.bulletin.Constants;
 import com.bulletin.entity.Eleve;
 import com.bulletin.entity.Matiere;
 import com.bulletin.entity.Note;
@@ -16,12 +17,6 @@ import java.util.*;
  * Created by geoffroy on 13/11/14.
  */
 public class WordWriter {
-
-    private static final int FIRST_YEAR = 2014;
-    private static final int SECOND_YEAR = 2015;
-    private static final Trimester CURRENT_TRIMESTER = Trimester.THIRD_TRIMESTER;
-
-    private static final int NUMBER_OF_LINE_ON_FIRST_PAGE = 51;
 
     private List<String> xmlOutputString;
     private List<Matiere> rootMatiere;
@@ -50,8 +45,8 @@ public class WordWriter {
         Tag firstYear = Tag.FIRST_YEAR;
         Tag secondYear = Tag.SECOND_YEAR;
 
-        String currentYearStr = "" + FIRST_YEAR;
-        String nextYearStr = "" + SECOND_YEAR;
+        String currentYearStr = "" + Constants.FIRST_YEAR;
+        String nextYearStr = "" + Constants.SECOND_YEAR;
 
 
         template = template.replace(firstYear.getShortName(), currentYearStr);
@@ -83,8 +78,8 @@ public class WordWriter {
             nbMatiere++;
             sb.append(populateEmptyLines(1));
 
-            if(nbMatiere == 6 && this.lineCounter < NUMBER_OF_LINE_ON_FIRST_PAGE) {
-                sb.append(populateEmptyLines(NUMBER_OF_LINE_ON_FIRST_PAGE -this.lineCounter));
+            if(nbMatiere == 6 && this.lineCounter < Constants.NUMBER_OF_LINE_ON_FIRST_PAGE) {
+                sb.append(populateEmptyLines(Constants.NUMBER_OF_LINE_ON_FIRST_PAGE -this.lineCounter));
             }
         }
 
@@ -96,8 +91,8 @@ public class WordWriter {
     }
 
     private String populateTrimester(String template) {
-        template = template.replace(Tag.TRIMESTER_NUMBER.getShortName(),CURRENT_TRIMESTER.getNumber().toString());
-        return template.replace(Tag.TRIMESTER_UPPER.getShortName(),CURRENT_TRIMESTER.getExposant());
+        template = template.replace(Tag.TRIMESTER_NUMBER.getShortName(), Constants.CURRENT_TRIMESTER.getNumber().toString());
+        return template.replace(Tag.TRIMESTER_UPPER.getShortName(), Constants.CURRENT_TRIMESTER.getUpperText());
     }
 
 

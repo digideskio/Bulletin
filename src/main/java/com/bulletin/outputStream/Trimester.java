@@ -9,18 +9,18 @@ public enum Trimester {
     THIRD_TRIMESTER(3,"eme");
 
     private final Integer number;
-    private final String exposant;
+    private final String upperText;
 
-    Trimester(int number, String exposant) {
+    Trimester(int number, String upperText) {
         this.number  = number;
-        this.exposant = exposant;
+        this.upperText = upperText;
     }
 
     public Integer getNumber() {
         return number;
     }
 
-    public String getExposant() {
-        return exposant;
+    public String getUpperText() {
+        return upperText;
     }
 }
