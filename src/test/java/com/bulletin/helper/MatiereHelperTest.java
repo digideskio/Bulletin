@@ -37,8 +37,4 @@ public class MatiereHelperTest {
         assertThat(MatiereHelper.getMatiereByName("m3", matieres), is(m1));
     }
 
-    @Test
-    public void testGetRootMatieres() throws Exception {
-
-    }
 }
