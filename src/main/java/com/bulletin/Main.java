@@ -21,7 +21,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException, MatiereNotFoundException, EleveNotFoundException, NoteNotFoundException {
 
-        if(args.length != 7) {
+        if(args.length != 8) {
             System.out.println("Usage incorrect");
             System.out.println("---------------");
             System.out.println("Usage correct : ");
@@ -30,13 +30,13 @@ public class Main {
         }
 
 
-        String pathToExcel = args[0];
-        String pathToOutput = args[1];
-        String studentTemplateFileName = args[2];
-        String basicBlocTemplate = args[3];
-        String basicLineTemplate = args[4];
-        String subMatiereTemplate = args[5];
-        String finalTemplateFileName = args[6];
+        String pathToExcel = args[1];
+        String pathToOutput = args[2];
+        String studentTemplateFileName = args[3];
+        String basicBlocTemplate = args[4];
+        String basicLineTemplate = args[5];
+        String subMatiereTemplate = args[6];
+        String finalTemplateFileName = args[7];
 
 
 
